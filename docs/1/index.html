@@ -1,0 +1,88 @@
+<style>
+:root {
+    --font-size:max(16px, calc(100vw / 42));
+    --em-style:filled sesame;
+    --em-color:#fff;
+    --color:#fff;
+    --a-color:#ff0;
+    --background-color:#000;
+    --selection-color:#000;
+    --selection-background-color:#aa0;
+    --a-selection-color:#ee0;
+    --a-selection-background-color:#00f;
+    --caret-color: auto;
+    --outline-color:#fff;
+    --outline-style:solid;
+    --outline-width:2px;
+    --button-focus-color:#000;
+    --button-focus-background-color:#aa0;
+}
+body {
+    overflow-x:hidden;
+    overflow-y:hidden;
+    padding:0;margin:0;
+    width:100%;
+    height:100%;
+}
+*:focus {
+    outline-color: var(--outline-color);
+    outline-style: var(--outline-style);
+    outline-width: var(--outline-width);
+}
+button:focus {
+    color: var(--button-focus-color);
+    background-color: var(--button-focus-background-color);
+}
+body, textarea, button {
+    font-family: 'Noto Serif JP', 'Source Han Serif JP', 'Noto Color Emoji', serif; 
+    font-size: var(--font-size);
+    line-height: 1.7em;
+    letter-spacing: 0.05em;
+    color: var(--color);
+    background-color: var(--background-color);
+    caret-color: var(--caret-color);
+}
+::selection {
+    color: var(--selection-color);
+    background-color: var(--selection-background-color);
+    text-shadow: none;
+}
+a::selection {
+    color: var(--a-selection-color);
+    background-color: var(--a-selection-background-color);
+    text-shadow: none;
+}
+button { user-select:none; font-size:var(--font-size); padding:0; margin:0; line-height:1em; letter-spacing:0; word-break:break-word; }
+h1 { font-family: 'Noto Sans JP', 'Source Han Sans JP', 'Noto Color Emoji', sans-serif; }
+em {
+    font-style: normal; /* 非イタリック化 */
+    text-emphasis: var(--em-style) var(--em-color);
+    -webkit-text-emphasis: var(--em-style) var(--em-color);
+}
+a:link, a:visited, a:hover, a:active { color: var(--a-color); }
+/*
+a:link { color: #0000ff; }
+a:visited { color: #000080; }
+a:hover { color: #ff0000; }
+a:active { color: #ff8000; }
+*/
+</style>
+<script type="text/javascript" src="../lib/van/1.5.0/nomodule.min.js"></script>
+<script type="text/javascript" src="../lib/util/string/length.js"></script>
+<script type="text/javascript" src="layout.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', async(event) => {
+    const size = {
+        w: van.state(document.body.clientWidth),
+        h: van.state(document.documentElement.clientHeight),
+    }
+    van.add(document.body,
+        ()=>van.tags.div({style:()=>`box-sizing:border-box;width:${size.w.val};height:${size.h.val};padding:0;margin:0;overflow-y:auto;`}, ()=>`W:${size.w.val}`, ()=>`H:${size.h.val}`, 'あ'.repeat(50).Graphemes.map(v=>van.tags.p(v)))
+    )
+    window.addEventListener('resize', async(e) => {
+        size.w.val = document.body.clientWidth
+        size.h.val = document.documentElement.clientHeight
+        console.log(size.w.val, size.h.val)
+    })
+})
+</script>

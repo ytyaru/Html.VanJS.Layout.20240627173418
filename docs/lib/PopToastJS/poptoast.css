@@ -1,0 +1,117 @@
+/* Container for toast messages */
+.pop-toast-container {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+}
+
+/* Base style for toast messages */
+.pop-toast {
+  margin-bottom: 16px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #222;
+  background-color: #fff;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  /* 初めて表示されたときのアニメーションのために不透明度を0に設定します。 */
+  transform: translateY(-100%);
+  /* スライド表示アニメーション（方向） */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  /* 不透明度と位置の変化にアニメーションを追加します。 */
+}
+
+/* Style for toast message */
+.pop-toast-message {
+  margin-right: 10px;
+  flex-grow: 1;
+  /* 余ったスペースを利用して、メッセージが他の要素を圧迫しないようにします。 */
+}
+
+/* Style for close button */
+.pop-toast-close {
+  font-size: 20px;
+  padding: 0px 4px;
+  line-height: 1;
+  color: #777;
+  background-color: #eee;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  border-radius: 100%;
+}
+
+.pop-toast-close:hover {
+  opacity: 1
+    /* マウスが乗ったときの強調表示 */
+}
+
+/* Animation classes */
+.pop-toast-show {
+  opacity: 1;
+  transform: translateY(0);
+  /* スライド表示アニメーション（方向） */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.pop-toast-hidden {
+  opacity: 0;
+  transform: translateY(-100%);
+  /* スライド表示アニメーション（方向） */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.pop-toast-icon {
+  margin-right: 4px;
+}
+
+.pop-toast-icon svg {
+  vertical-align: middle;
+  /* アイコンがメッセージと同じ高さになるように設定します。 */
+}
+
+/* position */
+.pop-toast-top-right {
+  /* デフォルトなので不要 */
+}
+
+.pop-toast-top-left {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+}
+
+.pop-toast-bottom-right {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+}
+
+.pop-toast-bottom-left {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+}
+
+
+/* Icons color */
+.pop-toast-success .pop-toast-icon {
+  color: #4CAF50;
+}
+
+.pop-toast-warning .pop-toast-icon {
+  color: #FF9800;
+}
+
+.pop-toast-error .pop-toast-icon {
+  color: #F44336;
+}
+
+.pop-toast-info .pop-toast-icon {
+  color: #2196F3;
+}

@@ -95,7 +95,8 @@ window.addEventListener('DOMContentLoaded', async(event) => {
         ...htmls.val,
     ]
     */
-    van.add(document.body, ()=>fitDiv.el)
+    //van.add(document.body, ()=>fitDiv.el)
+    van.add(document.body, fitDiv.el)
     window.addEventListener('resize', async(e)=>fitDiv.resize())
     /*
     class DocState {

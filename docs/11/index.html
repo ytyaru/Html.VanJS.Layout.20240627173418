@@ -1,0 +1,91 @@
+<style>
+:root {
+    --font-size:max(16px, calc(100vw / 42));
+    --em-style:filled sesame;
+    --em-color:#fff;
+    --color:#fff;
+    --a-color:#ff0;
+    --background-color:#000;
+    --selection-color:#000;
+    --selection-background-color:#aa0;
+    --a-selection-color:#ee0;
+    --a-selection-background-color:#00f;
+    --caret-color: auto;
+    --outline-color:#fff;
+    --outline-style:solid;
+    --outline-width:2px;
+    --button-focus-color:#000;
+    --button-focus-background-color:#aa0;
+}
+body {
+    overflow-x:hidden;
+    overflow-y:hidden;
+    padding:0;margin:0;
+    width:100%;
+    height:100%;
+}
+*:focus {
+    outline-color: var(--outline-color);
+    outline-style: var(--outline-style);
+    outline-width: var(--outline-width);
+}
+button:focus {
+    color: var(--button-focus-color);
+    background-color: var(--button-focus-background-color);
+}
+body, textarea, button {
+    font-family: 'Noto Serif JP', 'Source Han Serif JP', 'Noto Color Emoji', serif; 
+    font-size: var(--font-size);
+    line-height: 1.7em;
+    letter-spacing: 0.05em;
+    color: var(--color);
+    background-color: var(--background-color);
+    caret-color: var(--caret-color);
+}
+::selection {
+    color: var(--selection-color);
+    background-color: var(--selection-background-color);
+    text-shadow: none;
+}
+a::selection {
+    color: var(--a-selection-color);
+    background-color: var(--a-selection-background-color);
+    text-shadow: none;
+}
+button { user-select:none; font-size:var(--font-size); padding:0; margin:0; line-height:1em; letter-spacing:0; word-break:break-word; }
+h1 { font-family: 'Noto Sans JP', 'Source Han Sans JP', 'Noto Color Emoji', sans-serif; }
+em {
+    font-style: normal; /* 非イタリック化 */
+    text-emphasis: var(--em-style) var(--em-color);
+    -webkit-text-emphasis: var(--em-style) var(--em-color);
+}
+a:link, a:visited, a:hover, a:active { color: var(--a-color); }
+/*
+a:link { color: #0000ff; }
+a:visited { color: #000080; }
+a:hover { color: #ff0000; }
+a:active { color: #ff8000; }
+*/
+</style>
+<script type="text/javascript" src="../lib/van/1.5.0/nomodule.min.js"></script>
+<script type="text/javascript" src="../lib/util/string/length.js"></script>
+<script type="text/javascript" src="client-size.js"></script>
+<script type="text/javascript" src="client-div.js"></script>
+<script type="text/javascript" src="client-triple.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', async(event) => {
+    const triple = new ClientTriple()
+    const htmls = van.state([])
+    triple.first.children = [
+        van.tags.button({onclick:()=>{htmls.val=[...htmls.val, van.tags.p('あ'.repeat(40))];console.log(htmls.val)}}, '＋'),
+        van.tags.button({onclick:()=>htmls.val=[]}, '×'),
+        van.tags.button({onclick:()=>{triple.first.writingMode.toggle()}}, ()=>triple.first.writingMode.label),
+        van.tags.p(()=>`col:${triple._columns.val}, row:${triple._rows.val}`),
+        ()=>van.tags.div(htmls.val),
+    ]
+    triple.menu.children = ['menu']
+    triple.last.children  = ['last']
+    console.log(triple._children)
+    van.add(document.body, triple.el)
+})
+</script>

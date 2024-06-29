@@ -16,6 +16,10 @@ class ClientSize {
     }
     get w() { return this._size.w.val }
     get h() { return this._size.h.val }
+    get vScrollbarBlockSize() { return window.innerWidth - document.body.clientWidth }
+    get hSscrollbarBlockSize() { return window.innerHeight - document.body.clientHeight }
+    get hasVScrollbar() { return 0 < this.vScrollbarBlockSize }
+    get hasHScrollbar() { return 0 < this.hScrollbarBlockSize }
 }
 window.clientSize = new ClientSize()
 })()

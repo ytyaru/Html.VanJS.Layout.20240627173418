@@ -3,7 +3,6 @@ class ClientTriple { // windowのclientにFitするdiv要素
     constructor(children) {
         this._columns = van.state(`48% 4% 48%`)
         this._rows = van.state(`100%`)
-        //this._childs = ['red','green','blue'].map((c,i)=>new InDiv((0===i) ? children : null, c))
         this._childs = ['red','green','blue'].map((c,i)=>new InDiv((0===i) ? children : null, c, 1===i))
         this._el = van.tags.div({style:()=>this.#style()},
             ()=>this._childs[0].el,
@@ -31,6 +30,7 @@ class ClientTriple { // windowのclientにFitするdiv要素
         const sizes = (isLandscape) ? landscapeSizes : portraitSizes
         this._columns.val = sizes[0]
         this._rows.val = sizes[1]
+        this.menu.writingMode[`set${(isLandscape) ? 'Vertical' : 'Horizontal'}`]()
 //        this.#setFontSize(uiWidth)
     }
     /*
@@ -49,16 +49,20 @@ class InDiv {
         this._fs = new CssFontSize(null, this._wm, isMin)
         this._children = van.state(children || [])
         this._el = van.tags.div({
-                style:()=>`width:100%;height:100%;border:0;overflow:auto;background-color:${col};${this._wm.css}${this._fs.css}`,
+                style:()=>`width:100%;height:100%;border:0;overflow:auto;${this.#minStyle()}background-color:${col};${this._wm.css}${this._fs.css}`,
                 onwheel:(e)=>this.#onWheel(e), 
             }, 
             ()=>van.tags.div(this._children.val))
         this._fs.el = this._el
+        // 初期フォントサイズ設定用
+//        setTimeout(()=>this._wm.toggle(), 10)
+//        setTimeout(()=>this._wm.toggle(), 50)
     }
     get el() { return this._el }
     get children() { return this._children.val }
     set children(v) { if (Array.isArray(v)) this._children.val = v }
     get writingMode() { return this._wm }
+    #minStyle() { return (this.isMin) ? `letter-spacing:0;line-height:1em;` : '' }
     #onWheel(e) { // 縦書き時マウスホイールで横スクロールできるようにする
         if (this._wm.isVertical) {
             if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
@@ -70,7 +74,8 @@ class InDiv {
 }
 // サイズ：https://hccbe.com/Misc/ElePosSiz/
 class CssFontSize {
-    constructor(el, wm, isMin=false) { this._el = el; this._wm = wm; this.isMin = isMin }
+    //constructor(el, wm, isMin=false) { this._el = el; this._wm = wm; this.isMin = isMin }
+    constructor(el, wm, isMin=false) { this._el = van.state(el); this._wm = wm; this.isMin = isMin }
     calc() {
         if (this.isMin) { return 16 }
         const lineOfChars = this.#inlineSize / 16
@@ -78,7 +83,9 @@ class CssFontSize {
         else if (lineOfChars <= 42) { return 18 } // 481px〜672px（25〜35字）
         else { return this.#inlineSize / 42 }           // 673px〜     （    40字）
     }
-    set el(v) { this._el = v }
+    //set el(v) { this._el = v }
+    get el( ) { return this._el.val }
+    set el(v) { this._el.val = v }
     get css() { return `font-size:${this.calc()}px;` }
     get #size() { return this.#toIb(...this.#clientWh) }
     #toIb(w, h) { // return [inline, block]
@@ -110,11 +117,13 @@ class CssFontSize {
     get #blockSize() { return this.#ib[1] }
     */
     get #offsetWh() { // client + scroll + border === getBoundingClientRect()
-        if (this._el) { return [this._el.offsetWidth, this._el.offsetHeight] }
+        //if (this._el) { return [this._el.offsetWidth, this._el.offsetHeight] }
+        if (this.el) { return [this.el.offsetWidth, this.el.offsetHeight] }
         else { return [document.documentElement.offsetWidth, document.documentElement.offsetHeight] }
     }
     get #clientWh() {
-        if (this._el) { return [this._el.clientWidth, this._el.clientHeight] }
+        //if (this._el) { return [this._el.clientWidth, this._el.clientHeight] }
+        if (this.el) { return [this.el.clientWidth, this.el.clientHeight] }
         else { return [document.documentElement.clientWidth, document.documentElement.clientHeight] }
     }
     get #scrollWh() {

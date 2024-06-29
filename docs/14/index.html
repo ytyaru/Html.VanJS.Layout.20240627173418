@@ -74,21 +74,21 @@ a:active { color: #ff8000; }
 <script type="text/javascript" src="client-triple.js"></script>
 <script>
 window.addEventListener('DOMContentLoaded', async(event) => {
-    const triple = new ClientTriple()
+    const body = van.state([])
+    const textarea = van.tags.textarea({style:()=>`width:100%;height:100%;resize:none;`, placeholder:'テキストエリア', oninput:(e)=>body.val=e.target.value.split('\n').filter(v=>v)})
+    const triple = new ClientTriple([textarea])
     const htmls = van.state([])
-    triple.first.children = [
+    triple.last.children = [
         van.tags.button({onclick:()=>{htmls.val=[...htmls.val, van.tags.p('あ'.repeat(40))];console.log(htmls.val)}}, '＋'),
         van.tags.button({onclick:()=>htmls.val=[]}, '×'),
         van.tags.button({onclick:()=>{triple.first.writingMode.toggle()}}, ()=>triple.first.writingMode.label),
         van.tags.p(()=>`col:${triple._columns.val}, row:${triple._rows.val}`),
         ()=>van.tags.div(htmls.val),
+        ()=>van.tags.div(body.val.map(v=>van.tags.p(v))),
     ]
     triple.menu.children = ['menu']
-    triple.last.children  = ['last']
     console.log(triple._children)
     van.add(document.body, triple.el)
-    //setTimeout(()=>{triple.first.writingMode.toggle();triple.first.writingMode.toggle();}, 500)
-//    setTimeout(()=>triple.first.writingMode.toggle(), 10)
-//    setTimeout(()=>triple.first.writingMode.toggle(), 50)
+    textarea.focus()
 })
 </script>

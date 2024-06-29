@@ -1,0 +1,129 @@
+<style>
+:root {
+    --font-size:max(16px, calc(100vw / 42));
+    --em-style:filled sesame;
+    --em-color:#fff;
+    --color:#fff;
+    --a-color:#ff0;
+    --background-color:#000;
+    --selection-color:#000;
+    --selection-background-color:#aa0;
+    --a-selection-color:#ee0;
+    --a-selection-background-color:#00f;
+    --caret-color: auto;
+    --outline-color:#fff;
+    --outline-style:solid;
+    --outline-width:2px;
+    --button-focus-color:#000;
+    --button-focus-background-color:#aa0;
+}
+body {
+    overflow-x:hidden;
+    overflow-y:hidden;
+    padding:0;margin:0;
+    width:100%;
+    height:100%;
+}
+*:focus {
+    outline-color: var(--outline-color);
+    outline-style: var(--outline-style);
+    outline-width: var(--outline-width);
+}
+button:focus {
+    color: var(--button-focus-color);
+    background-color: var(--button-focus-background-color);
+}
+body, textarea, button {
+    font-family: 'Noto Serif JP', 'Source Han Serif JP', 'Noto Color Emoji', serif; 
+    font-size: var(--font-size);
+    line-height: 1.7em;
+    letter-spacing: 0.05em;
+    color: var(--color);
+    background-color: var(--background-color);
+    caret-color: var(--caret-color);
+}
+::selection {
+    color: var(--selection-color);
+    background-color: var(--selection-background-color);
+    text-shadow: none;
+}
+a::selection {
+    color: var(--a-selection-color);
+    background-color: var(--a-selection-background-color);
+    text-shadow: none;
+}
+button { user-select:none; font-size:var(--font-size); padding:0; margin:0; line-height:1em; letter-spacing:0; word-break:break-word; }
+h1 { font-family: 'Noto Sans JP', 'Source Han Sans JP', 'Noto Color Emoji', sans-serif; }
+em {
+    font-style: normal; /* 非イタリック化 */
+    text-emphasis: var(--em-style) var(--em-color);
+    -webkit-text-emphasis: var(--em-style) var(--em-color);
+}
+a:link, a:visited, a:hover, a:active { color: var(--a-color); }
+/*
+a:link { color: #0000ff; }
+a:visited { color: #000080; }
+a:hover { color: #ff0000; }
+a:active { color: #ff8000; }
+*/
+</style>
+<script type="text/javascript" src="../lib/van/1.5.0/nomodule.min.js"></script>
+<script type="text/javascript" src="../lib/util/string/length.js"></script>
+<script type="text/javascript" src="client-size.js"></script>
+<script type="text/javascript" src="client-div.js"></script>
+<script type="text/javascript" src="client-triple.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', async(event) => {
+    const body = van.state([])
+    const textarea = van.tags.textarea({
+        style:()=>`width:100%;height:100%;resize:none;box-sizing:border-box;`, 
+        placeholder:'テキストエリア', 
+        oninput:(e)=>body.val=e.target.value.split('\n').filter(v=>v), // 二連続改行で一パラグラフとするなら位置計算は簡単
+        onscroll:(e)=>{
+            // スクロール最上位置の行数を取得する（折返しも一行とカウントされてしまう！）
+            const top = e.target.scrollTop
+            const lh = parseFloat(getComputedStyle(e.target).lineHeight)
+            //const lh = e.target.scrollHeight / Math.max(1, e.target.value.split('\n').length)
+            console.log('Top:', top, 'Left:',e.target.scrollLeft)
+            console.log('lineHeight:', lh)
+            const lineNo = (0===top) ? 0 : Math.ceil(top / lh)
+            console.log('lineNo:', lineNo)
+            /*
+            */
+            /*
+            // キャレット位置までの文字列内にある改行数
+            const start = e.target.selectionStart
+            console.log('start:', start)
+            const sub = e.target.value.substring(0, start)
+            const count = (sub.match(/\n/g) || []).length;
+            console.log('lineNo:', count+1)
+            */
+        },
+        /*
+        onselectionchange:(e)=>{
+            // キャレット位置までの文字列内にある改行数
+            const start = e.target.selectionStart
+            console.log('start:', start)
+            const sub = e.target.value.substring(start)
+            const subCount = (sub.match(/\n/g) || []).length;
+            const allCount = (e.target.value.match(/\n/g) || []).length;
+            console.log('lineNo:', allCount - subcount + 1)
+        },
+        */
+        })
+    const triple = new ClientTriple([textarea])
+    const htmls = van.state([])
+    triple.last.children = [
+        van.tags.button({onclick:()=>{htmls.val=[...htmls.val, van.tags.p('あ'.repeat(40))];console.log(htmls.val)}}, '＋'),
+        van.tags.button({onclick:()=>htmls.val=[]}, '×'),
+        van.tags.button({onclick:()=>{triple.first.writingMode.toggle()}}, ()=>triple.first.writingMode.label),
+        van.tags.p(()=>`col:${triple._columns.val}, row:${triple._rows.val}`),
+        ()=>van.tags.div(htmls.val),
+        ()=>van.tags.div(body.val.map(v=>van.tags.p(v))),
+    ]
+    triple.menu.children = ['menu']
+    console.log(triple._children)
+    van.add(document.body, triple.el)
+    textarea.focus()
+})
+</script>

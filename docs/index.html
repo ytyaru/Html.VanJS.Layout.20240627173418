@@ -12,12 +12,13 @@
 <style>
 body {
 /*    font-size:max(16px, calc(100vw / 45));*/
-    line-height:1.7em;
-    letter-spacing:0.05em;
+    line-height:1.7rem;
+    letter-spacing:0.05rem;
     color:#000;
     background-color:#ddd;
     font-family: 'Noto Serif JP', 'Source Han Serif JP', 'Noto Color Emoji', serif; 
 }
+p { padding:0; margin:0;line-height:1.7rem; }
 h1,h2,h3,h4,h5,h6,th,label,caption,legend,code { font-family: 'Noto Sans JP', 'Source Han Sans JP', 'Noto Color Emoji', sans-serif; }
 em {
     font-style: normal; /* 非イタリック化 */
@@ -33,7 +34,8 @@ const {h1,p,br,ol,li,footer,small,time,a,img} = van.tags
 window.addEventListener('DOMContentLoaded', async(event) => {
     // 最新版ほどitemsの先頭に配置する。旧版ほど末尾。
     const items = [
-        'キー入力時にビューアスクロール連動した（マウスホイール時には不可）',
+        '別クラス化',
+        'キー入力時にビューアスクロール連動した（キャレット位置を先頭とする。マウスホイール時には不可）',
         '失敗：エディタ＆ビューアのスクロール連動（できない）',
         'テキストエディタ＋ビューア',
         'font-sizeを最適化する',

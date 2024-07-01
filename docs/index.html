@@ -34,6 +34,7 @@ const {h1,p,br,ol,li,footer,small,time,a,img} = van.tags
 window.addEventListener('DOMContentLoaded', async(event) => {
     // 最新版ほどitemsの先頭に配置する。旧版ほど末尾。
     const items = [
+        'やはりスクロール連動は無理（キャレット位置の文字インデックス・座標・HTML要素位置の同期計算ができない）',
         '別クラス化',
         'キー入力時にビューアスクロール連動した（キャレット位置を先頭とする。マウスホイール時には不可）',
         '失敗：エディタ＆ビューアのスクロール連動（できない）',
